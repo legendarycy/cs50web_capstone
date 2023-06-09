@@ -1,0 +1,26 @@
+{% extends "ticket_purchase/layout.html" %}
+
+{% block body %}
+    <div class = 'admin-div'>
+        <h2>Login</h2>
+        <br>
+        {% if message %}
+            <div>{{ message }}</div>
+        {% endif %}
+        <br>
+        <form action="{% url 'login' %}" method="post" class = 'admin-form'>
+            {% csrf_token %}
+            <div class="form-group">
+                <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Login">
+        </form>
+        <br>
+        Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    </div>
+    
+
+{% endblock %}

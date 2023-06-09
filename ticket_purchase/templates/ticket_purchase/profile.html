@@ -1,0 +1,48 @@
+{% extends 'ticket_purchase/layout.html' %}
+{% load static %}
+
+{% block body %}
+
+    {% block script %}
+        <script src = "{% static '/ticket_purchase/profile.js' %}"></script>
+    {% endblock %}
+
+    <div id = 'main' class = 'col-md-4 centralized-container'>
+        <h4 class = 'subheading'>My Transactions</h4>
+        {% if transactions %}
+            {% for transaction in transactions %}
+                <div class = 'purchases'>
+                    <br>
+                    <div class = 'transaction yellow-container'>
+                        <div class = 'movie-details'>
+                            <div class = 'd-flex align-items-center justify-content-center'>
+                                <div class = 't-thumbnail-container'>
+                                    <img class = 'transaction-thumbnail' src = '{{ transaction.6 }}'>
+                                </div>
+                                <div class = 'text-left'>
+                                    <h4 class = "subheading">{{ transaction.0}} </h4>
+                                    <p>{{ transaction.1 }}, Hall {{ transaction.2 }}</p>
+                                    <br>
+                                    <p class = 'seats-purchased'>Seats: {{ transaction.5 }}</p>
+                                    <p> S${{ transaction.4 }}.00 Paid on {{ transaction.3 }}</p>
+                                    <hr>
+                                    <div class = 'qr_container' data-transaction = "{{ transaction.7 }}">
+                                        <button class = 'subheading qr_button' onclick = "animate_subheading(this)">
+                                            <i class = 'fas fa-magnifying-glass'></i> Click for Ticket QR Code
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+                <br>
+                <p>-No transactions to display-</p>
+        {% endif %}
+
+    </div>
+{% endblock %}
+

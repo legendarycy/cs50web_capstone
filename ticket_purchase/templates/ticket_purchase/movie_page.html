@@ -1,0 +1,119 @@
+{% extends 'ticket_purchase/layout.html' %}
+{% load static %}
+
+{% block body %}
+
+    {% block script %}
+        <script src = "{% static '/ticket_purchase/movie_page.js' %}"></script>
+    {% endblock %}
+
+    <div id = 'main' class = 'col-md-4'>
+        <h3 class = 'subheading'>{{ title }}</h3>
+        <hr>
+        <div id = 'poster-info-container' class = 'row g-2'>
+            <div id = 'poster' class = 'col-md-6'>
+                <img src = "{{ thumbnail }}">
+            </div>
+
+            <div id = 'info' class = 'col-md-6'>
+                <div class = 'text-start text-justify'>
+                    <h5 class = 'subheading'>Details</h5>
+                    <p><b>Release: </b>{{ release }}</p>
+                    <p><b>Language: </b>{{ language }}</p>
+                    <p><b>Genre: </b>{{ genre }}</p>
+                    <p><b>Runtime: </b>{{ runtime }} mins</p>
+                    <p><b>Director: </b>{{ director }}</p>
+
+                    <p><b>Cast: </b>{{ cast }}</p>
+                    <hr>
+                    <h5 class = 'subheading'>Synopsis:</h5>
+                    <p>{{ description }}</p>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <hr>
+        <div id = 'ticketing-section'>
+            <h5 class = 'text-justify subheading'>Buy Tickets</h5>
+            <div class = 'yellow-container'>
+                <div id = 'seating-plan'>
+                </div>
+                <br>
+                <div id = 'selected_seats'></div>
+                <br>
+                <div id = 'datetime_slot'>
+                    <hr>
+                    <h6>Select Timeslot</h6>
+                    <div id = 'timeslots'></div>
+                        <div id = 'timeslot_buttons '>
+                            {% for slot in slots %}
+                                <button id = 'slot' 
+                                onclick = "load_slots(this)" 
+                                data-id = '{{ slot.id }}'>
+                                    {{ slot.date|date:"d M Y" }}
+                                    <br>
+                                    {{ slot.date|date:"h:i A"}}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id = 'comment-section'>
+            <br>
+            <h4>Reviews</h4>
+            {% if user.username %}
+            <form id = 'comment-submission' data-id = '{{ id }}'>
+                {% csrf_token %}
+                <div class="rating">
+                    <h5>Rating: </h5>
+                    <button class = 'star' data-rating="1"><i class = 'fas fa-star'></i></button>
+                    <button class = 'star' data-rating="2"><i class = 'fas fa-star'></i></button>
+                    <button class = 'star' data-rating="3"><i class = 'fas fa-star'></i></button>
+                    <button class = 'star' data-rating="4"><i class = 'fas fa-star'></i></button>
+                    <button class = 'star' data-rating="5"><i class = 'fas fa-star'></i></button>
+                </div>
+                <input type = 'number' value = 0 step = 1 id = 'rating-given' name = 'rating' >
+                <textarea id = 'write-comment' name ='comment' placeholder="Write Something..."></textarea>
+                <button id = 'submit-comment' class = 'btn btn-primary'>Submit</button>
+            </form>
+            {% endif %}
+
+            <div id = 'display-comments'>
+                {% if comments %}
+                    {% for comment in comments%}
+                    <div class = 'comment'>
+                        <div class = 'author-info'>
+                            <div class = 'profile-pic'></div>
+                            <h6 class = 'author-name child'>{{ comment.author }},</h6>
+                            <p class = 'child'>{{ comment.timestamp }}</p>
+                        </div>
+                        <div class = 'rating-visual'>
+                            {% for each in comment.gold_stars %}
+                                <i class="fa-solid fa-star" style="color: rgb(255, 217, 0);"></i>
+                            {% endfor %}
+                            {% for each in comment.grey_stars %}
+                                <i class="fa-solid fa-star" style="color: rgb(180, 180, 180);"></i>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <div class = 'comment-content child'>
+                            <pre class = 'text-justify'>{{ comment.comment }}</pre>
+                        </div>
+                    </div>
+                    {% endfor%}
+                {% else %}
+                    <p style ='font-size: 20px;'>-No Reviews-</p>
+                {% endif %}
+            </div>
+            <br>
+        </div>
+
+    </div>
+
+    
+
+{% endblock %}
+
